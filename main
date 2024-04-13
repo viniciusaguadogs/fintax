@@ -1,0 +1,89 @@
+# Função para calcular o fator
+def calcular_fator(atividade, regime_tributacao):
+    tabela_fatores = {
+        "PRESUMIDO": {
+            "AGRÍCOLA": 0.0008,
+            "ATACADISTA": 0.0238,
+            "AUTOPEÇAS": 0.0026,
+            "BAR/RESTAURANTE": None,
+            "COMÉRCIO EM GERAL": 0.0016,
+            "CONCESSIONARIA": 0.0007,
+            "CONSTRUÇÃO CIVIL": 0.0065,
+            "COSMETICOS": 0.0341,
+            "ENSINO": None,
+            "FARMÁCIAS": 0.0011,
+            "GLP": None,
+            "HOTELARIA": None,
+            "INDÚSTRIA": 0.0056,
+            "PANIFICADORAS": None,
+            "PET SHOP": 0.0086,
+            "POSTOS DE COMBUSTIVEIS": 0.0001,
+            "SAUDE": None,
+            "SERVICOS EM GERAL": 0.0239,
+            "SUPERMERCADO": 0.0121,
+            "TRANSPORTADORA": 0.001,
+            "VAREJISTA": 0.002
+        },
+        "REAL": {
+            "AGRÍCOLA": 0.0075,
+            "ATACADISTA": 0.0122,
+            "AUTOPEÇAS": 0.0051,
+            "BAR/RESTAURANTE": 0.0395,
+            "COMÉRCIO EM GERAL": 2.9914,
+            "CONCESSIONARIA": 0.0017,
+            "CONSTRUÇÃO CIVIL": None,
+            "COSMETICOS": 0.0008,
+            "ENSINO": 0.0013,
+            "FARMÁCIAS": 0.0254,
+            "GLP": 0.0004,
+            "HOTELARIA": 0.0074,
+            "INDÚSTRIA": 0.015,
+            "PANIFICADORAS": 0.0032,
+            "PET SHOP": 0.0079,
+            "POSTOS DE COMBUSTIVEIS": 0.0026,
+            "SAUDE": 0.0001,
+            "SERVICOS EM GERAL": 0.0125,
+            "SUPERMERCADO": 0.2114,
+            "TRANSPORTADORA": 0.0063,
+            "VAREJISTA": 0.0057
+        }
+    }
+    
+    return tabela_fatores[regime_tributacao].get(atividade, 0)
+
+
+# Função principal
+def main():
+    while True:  # Loop infinito
+        # Solicitar todas as informações de uma vez
+        entrada = input("Digite as informações no seguinte formato: faturamento1, faturamento2, faturamento3, faturamento4, faturamento5, regime1, regime2, regime3, regime4, regime5, atividade (ou 'sair' para encerrar): ")
+        
+        if entrada.lower() == 'sair':
+            break  # Sair do loop se 'sair' for digitado
+        
+        dados = entrada.split(", ")
+
+        # Separar os dados de faturamento, regime e atividade
+        faturamentos = [float(dado) for dado in dados[:5]]
+        regimes = dados[5:10]
+        atividade = dados[-1]
+
+        # Calcular os fatores para cada ano
+        fatores = [calcular_fator(atividade, regime) for regime in regimes]
+
+        # Calcular os créditos tributários estimados para cada ano
+        creditos_tributarios = [faturamento * fator for faturamento, fator in zip(faturamentos, fatores)]
+
+        # Exibir os créditos tributários estimados para cada ano
+        for i, credito in enumerate(creditos_tributarios, start=1):
+            print(f"Crédito tributário estimado para o ano {i}: R$ {credito:.2f}")
+
+        # Calcular o crédito financeiro estimado
+        total_credito_tributario = sum(creditos_tributarios)
+        min_credito = total_credito_tributario * 0.05
+        max_credito = total_credito_tributario * 0.5
+        print(f"Estimativa de crédito financeiro: de R$ {min_credito:.2f} a R$ {max_credito:.2f}")
+
+
+# Executar a função principal
+main()
